@@ -668,6 +668,27 @@ func (e *callExpr) eval(app *app, args []string) {
 		app.nav.recenterCenter()
 		app.ui.loadFile(app.nav)
 		app.ui.loadFileInfo(app.nav)
+	case "high":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.high()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
+	case "low":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.low()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
+	case "middle":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.middle()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
 	case "open":
 		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
 			normal(app)

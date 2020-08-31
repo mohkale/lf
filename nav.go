@@ -569,6 +569,30 @@ func (nav *nav) recenterCenter() {
 	}
 }
 
+func (nav *nav) high() {
+	dir := nav.currDir()
+	dir.ind = max(dir.ind-dir.pos, 0)
+	nav.recenterTop()
+}
+
+func (nav *nav) low() {
+	dir := nav.currDir()
+	beg := max(dir.ind-dir.pos, 0)
+	end := min(beg+nav.height, len(dir.files)) - 1
+	dir.ind = end
+	// this prevents dragging enteries above HIGH into view
+	dir.pos = end - beg
+}
+
+func (nav *nav) middle() {
+	dir := nav.currDir()
+	beg := max(dir.ind-dir.pos, 0)
+	end := min(beg+nav.height, len(dir.files)) - 1
+	dir.ind = beg + ((end - beg) / 2)
+	// this also prevents dragging enteries above HIGH into view
+	dir.pos = (end - beg) / 2
+}
+
 func (nav *nav) updir() error {
 	if len(nav.dirs) <= 1 {
 		return nil
