@@ -647,6 +647,27 @@ func (e *callExpr) eval(app *app, args []string) {
 		app.ui.loadFile(app.nav)
 		app.ui.loadFileInfo(app.nav)
 		onChdir(app)
+	case "recenter-top":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.recenterTop()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
+	case "recenter-bottom":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.recenterBottom()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
+	case "recenter-center":
+		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
+			normal(app)
+		}
+		app.nav.recenterCenter()
+		app.ui.loadFile(app.nav)
+		app.ui.loadFileInfo(app.nav)
 	case "open":
 		if app.ui.cmdPrefix != "" && app.ui.cmdPrefix != ">" {
 			normal(app)

@@ -549,6 +549,26 @@ func (nav *nav) down(dist int) {
 	dir.pos = min(dir.pos, maxind)
 }
 
+func (nav *nav) recenterTop() {
+	nav.currDir().pos = 0
+}
+
+func (nav *nav) recenterBottom() {
+	dir := nav.currDir()
+	if dir.ind >= nav.height-gOpts.scrolloff {
+		dir.pos = min(dir.ind, nav.height-1)
+		dir.pos = min(dir.pos, len(dir.files)-1)
+	}
+}
+
+func (nav *nav) recenterCenter() {
+	dir := nav.currDir()
+	centerPos := nav.height / 2
+	if dir.ind >= centerPos {
+		dir.pos = centerPos
+	}
+}
+
 func (nav *nav) updir() error {
 	if len(nav.dirs) <= 1 {
 		return nil
