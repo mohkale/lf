@@ -550,22 +550,39 @@ func (nav *nav) down(dist int) {
 }
 
 func (nav *nav) recenterTop() {
-	nav.currDir().pos = 0
+	dir := nav.currDir()
+	height := nav.height - 1
+	filesAfter := len(dir.files) - dir.ind - 1
+	dir.pos = min(gOpts.scrolloff, dir.ind)
+
+	// clamp view to within the bounds of the ui
+	if len(dir.files) < height {
+		dir.pos = dir.ind
+	} else if dir.pos+filesAfter <= height {
+		dir.pos = height - filesAfter
+	}
 }
 
 func (nav *nav) recenterBottom() {
 	dir := nav.currDir()
-	if dir.ind >= nav.height-gOpts.scrolloff {
-		dir.pos = min(dir.ind, nav.height-1)
-		dir.pos = min(dir.pos, len(dir.files)-1)
-	}
+	filesAfter := len(dir.files) - dir.ind - 1
+	off := min(filesAfter, gOpts.scrolloff)
+
+	dir.pos = min(dir.ind, nav.height-1-off)
+	dir.pos = min(dir.pos, len(dir.files)-1)
 }
 
 func (nav *nav) recenterCenter() {
 	dir := nav.currDir()
-	centerPos := nav.height / 2
-	if dir.ind >= centerPos {
-		dir.pos = centerPos
+	height := nav.height - 1
+	filesAfter := len(dir.files) - dir.ind - 1
+
+	dir.pos = min(height/2, dir.ind)
+
+	if len(dir.files) < height {
+		dir.pos = dir.ind
+	} else if dir.pos+filesAfter <= height {
+		dir.pos = height - filesAfter
 	}
 }
 
@@ -580,8 +597,7 @@ func (nav *nav) low() {
 	beg := max(dir.ind-dir.pos, 0)
 	end := min(beg+nav.height, len(dir.files)) - 1
 	dir.ind = end
-	// this prevents dragging enteries above HIGH into view
-	dir.pos = end - beg
+	nav.recenterBottom()
 }
 
 func (nav *nav) middle() {
@@ -589,8 +605,7 @@ func (nav *nav) middle() {
 	beg := max(dir.ind-dir.pos, 0)
 	end := min(beg+nav.height, len(dir.files)) - 1
 	dir.ind = beg + ((end - beg) / 2)
-	// this also prevents dragging enteries above HIGH into view
-	dir.pos = (end - beg) / 2
+	nav.recenterCenter()
 }
 
 func (nav *nav) updir() error {
